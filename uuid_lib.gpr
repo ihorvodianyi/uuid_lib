@@ -1,4 +1,4 @@
-library project Uuid_Lib_Project is
+library project Uuid_Lib is
 
    for Languages use ("Ada");
    for Library_Name use "Uuid_Lib";
@@ -12,5 +12,9 @@ library project Uuid_Lib_Project is
       for Vcs_Repository_Root use ".";
    end Ide;
 
-end Uuid_Lib_Project;
+   package Compiler is
+      for Switches ("ada") use ("-gnat2020");
+   end Compiler;
+
+end Uuid_Lib;
 
