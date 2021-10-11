@@ -1,4 +1,4 @@
---with Interfaces; use Interfaces;
+with Ada.Text_IO; use Ada.Text_IO;
 
 package UUIDs is
 
