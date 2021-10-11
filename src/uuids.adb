@@ -50,9 +50,8 @@ package body UUIDs is
       return Result;
    end To_String;
    
-   function From_String(UUID_String : String; Result : out UUID) return Boolean is
+   function From_String(UUID_String : in String; ID : in out UUID) return Boolean is
       Index : Integer := UUID_String'First;
-      ID : UUID;
       
       function Convert (High : Character;
                         Low : Character;
@@ -131,11 +130,17 @@ package body UUIDs is
          end if;
          Index := Index + 2;
       end loop;
-            
-      Result := ID;
+
       return True;
    end From_String;
    
+   procedure Set_Variant(ID : in out UUID) is
+   begin
+      -- Set variant 1
+      ID.Data(8) := (ID.Data(8) and 16#BF#) or 16#80#;
+   end Set_Variant;
+
+
    function Create_New return UUID is
       Res : UUID;
    begin
