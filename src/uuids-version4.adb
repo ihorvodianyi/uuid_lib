@@ -1,17 +1,19 @@
 with Ada.Numerics.Discrete_Random;
 package body UUIDs.Version4 is
 
-   package RNG is new Ada.Numerics.Discrete_Random (Byte);
+   package RNG is new Ada.Numerics.Discrete_Random(Unsigned_128);
    generator : RNG.Generator;
    
    function Create_New return UUID
-   is      
+   is
+      rand : Unsigned_128;
       ID : UUID;
-   begin
-      
+   begin      
       RNG.Reset(generator);
-      for i in UUID_Byte_Array'Range loop
-         ID.Data (i) := RNG.Random (generator);         
+      rand := RNG.Random(generator);
+      for i in UUID_Array'Range loop
+         ID.Data(i) := Unsigned_8(rand and 16#ff#);
+         rand := Shift_Right(rand, 8);
       end loop;      
       
       Set_Variant(ID);

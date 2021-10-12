@@ -14,7 +14,7 @@ package body UUIDs is
    end Is_Nil;
    
    function Get_Version (Self : in UUID) return Version_UUID is
-      Version_Byte : constant Byte := Self.data (6) and 16#F0#;
+      Version_Byte : constant Unsigned_8 := Self.data (6) and 16#F0#;
    begin
       case Version_Byte is
          when 16#10# => return Time_Based;
@@ -27,7 +27,7 @@ package body UUIDs is
    end Get_Version;
    
    function Get_Variant (Self : in UUID) return Variant_UUID is
-      Variant_Byte : constant Byte := Self.data (8);
+      Variant_Byte : constant Unsigned_8 := Self.data (8);
    begin
       if (Variant_Byte and 16#80#) = 0 then
          return NCS;
@@ -46,7 +46,7 @@ package body UUIDs is
       Item : Natural;
    begin
       
-      for I in UUID_Byte_Array'Range loop
+      for I in UUID_Array'Range loop
          Item := Natural(Self.Data(I));
          Result(Index_Result) := Hex_Chars(Item / 16);
          Result(Index_Result + 1) := Hex_Chars(item mod 16);
@@ -65,10 +65,10 @@ package body UUIDs is
       
       function Convert (High : Character;
                         Low : Character;
-                        Result : in out Byte) return Boolean
+                        Result : in out Unsigned_8) return Boolean
       is
          Bool_Result : Boolean := True;
-         High_Byte, Low_Byte : Byte;
+         High_Byte, Low_Byte : Unsigned_8;
       begin
          Result := 0;
          case High is
@@ -125,7 +125,7 @@ package body UUIDs is
       end if;
       
       Index := UUID_String'First;
-      for I in UUID_Byte_Array'Range loop
+      for I in UUID_Array'Range loop
          if Index = 9 or else Index = 14 or else Index = 19 or else Index = 24
          then
             if UUID_String(Index) /= Hyphen then
