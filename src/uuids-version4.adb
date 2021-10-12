@@ -11,16 +11,13 @@ package body UUIDs.Version4 is
    begin      
       RNG.Reset(generator);
       rand := RNG.Random(generator);
-      for i in UUID_Array'Range loop
-         ID.Data(i) := Unsigned_8(rand and 16#ff#);
+      for I in UUID_Array'Range loop
+         ID.Data(I) := Unsigned_8(rand and 16#ff#);
          rand := Shift_Right(rand, 8);
-      end loop;      
-      
-      Set_Variant(ID);
-      
+      end loop;
+      Set_Variant(ID);      
       -- Set the version
-      ID.Data (6) := (ID.Data (6) and 16#4F#) or 16#40#;
-      
+      ID.Data (6) := (ID.Data (6) and 16#4F#) or 16#40#;      
       return ID;
    end Create_New;
 

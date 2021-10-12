@@ -51,7 +51,6 @@ package body UUIDs is
          Result(Index_Result) := Hex_Chars(Item / 16);
          Result(Index_Result + 1) := Hex_Chars(item mod 16);
          Index_Result := Index_Result + 2;
-
          if I = 3 or else I = 5 or else I = 7 or else I = 9 then
             Result(Index_Result) := Hyphen;
             Index_Result := Index_Result + 1;
@@ -122,8 +121,7 @@ package body UUIDs is
    begin
       if UUID_String'Length /= 36 then
          return False;
-      end if;
-      
+      end if;      
       Index := UUID_String'First;
       for I in UUID_Array'Range loop
          if Index = 9 or else Index = 14 or else Index = 19 or else Index = 24
@@ -138,9 +136,8 @@ package body UUIDs is
          then
             return False;
          end if;
-         Index := Index + 2;
+         Index := Index + 2; 
       end loop;
-
       return True;
    end From_String;
    
@@ -149,12 +146,4 @@ package body UUIDs is
       -- Set variant 1
       ID.Data(8) := (ID.Data(8) and 16#BF#) or 16#80#;
    end Set_Variant;
-
-
-   function Create_New return UUID is
-      Res : UUID;
-   begin
-      return Res;
-   end;       
-
 end UUIDs;

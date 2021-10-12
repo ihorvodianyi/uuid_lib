@@ -19,8 +19,6 @@ package UUIDs is
                          Name_Based_SHA1
                         );
    
-   function Create_New return UUID;
-   
    function Is_Nil(Self : in UUID) return Boolean;
    function Get_Version(Self : in UUID) return Version_UUID;
    function Get_Variant(Self : in UUID) return Variant_UUID;
