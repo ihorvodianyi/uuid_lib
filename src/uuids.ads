@@ -20,8 +20,9 @@ package UUIDs is
    
    function Create_New return UUID;
    
-   function Get_Version (Self : in UUID) return Version_UUID;
-   function Get_Variant (Self : in UUID) return Variant_UUID;
+   function Is_Nil(Self : in UUID) return Boolean;
+   function Get_Version(Self : in UUID) return Version_UUID;
+   function Get_Variant(Self : in UUID) return Variant_UUID;
    function To_String(Self : in UUID) return String;
    function From_String(UUID_String : in String; ID : in out UUID) return Boolean;
    

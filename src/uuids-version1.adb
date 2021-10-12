@@ -1,9 +1,10 @@
-package body UUIDs.Version1 is
-
+package body UUIDs.Version1 is   
+   
    function Create_New return UUID
    is
       ID : UUID;
    begin
+      
       Set_Variant(ID);
       
       -- Set the version

@@ -3,6 +3,16 @@ package body UUIDs is
    Hyphen : constant Character := '-';
    Hex_Chars : constant array (0 .. 15) of Character := "0123456789abcdef";
    
+   function Is_Nil(Self : in UUID) return Boolean is
+   begin
+      for i in Self.Data'Range loop
+         if Self.Data (i) /= 0 then
+            return False;
+         end if;
+      end loop;
+      return True;
+   end Is_Nil;
+   
    function Get_Version (Self : in UUID) return Version_UUID is
       Version_Byte : constant Byte := Self.data (6) and 16#F0#;
    begin

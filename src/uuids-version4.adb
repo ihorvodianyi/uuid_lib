@@ -1,9 +1,19 @@
+with Ada.Numerics.Discrete_Random;
 package body UUIDs.Version4 is
 
+   package RNG is new Ada.Numerics.Discrete_Random (Byte);
+   generator : RNG.Generator;
+   
    function Create_New return UUID
-   is
+   is      
       ID : UUID;
    begin
+      
+      RNG.Reset(generator);
+      for i in UUID_Byte_Array'Range loop
+         ID.Data (i) := RNG.Random (generator);         
+      end loop;      
+      
       Set_Variant(ID);
       
       -- Set the version
