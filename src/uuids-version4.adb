@@ -7,7 +7,7 @@ package body UUIDs.Version4 is
    function Create_New return UUID
    is
       rand : Unsigned_128;
-      ID : UUID;
+      ID   : UUID;
    begin      
       RNG.Reset(generator);
       rand := RNG.Random(generator);
