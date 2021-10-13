@@ -1,7 +1,15 @@
+with Ada.Numerics.Discrete_Random;
+
+with GNAT.SHA1;
+with Ada.Streams; use Ada.Streams;
+
 package body UUIDs is
 
    Hyphen    : constant Character := '-';
    Hex_Chars : constant array (0 .. 15) of Character := "0123456789abcdef";
+   
+   package RNG is new Ada.Numerics.Discrete_Random(Unsigned_128);
+   generator : RNG.Generator;
    
    function Is_Nil(Self : in UUID) return Boolean is
    begin
@@ -145,4 +153,45 @@ package body UUIDs is
       -- Set variant 1
       ID.Data(8) := (ID.Data(8) and 16#BF#) or 16#80#;
    end Set_Variant;
+   
+   function Create_New_V4 return UUID
+   is
+      rand : Unsigned_128;
+      ID   : UUID;
+   begin      
+      RNG.Reset(generator);
+      rand := RNG.Random(generator);
+      for I in UUID_Array'Range loop
+         ID.Data(I) := Unsigned_8(rand and 16#ff#);
+         rand := Shift_Right(rand, 8);
+      end loop;
+      Set_Variant(ID);      
+      -- Set the version
+      ID.Data (6) := (ID.Data (6) and 16#4F#) or 16#40#;      
+      return ID;
+   end Create_New_V4;
+   
+   package SHA renames GNAT.SHA1;
+   
+   function Create_New_V5 return UUID
+   is
+      Context   : SHA.Context;
+      ID        : UUID;
+      SHA_Value : SHA.Binary_Message_Digest;
+      Index     : Stream_Element_Offset := SHA_Value'First;      
+   begin
+      Context := SHA.Initial_Context;
+      SHA.Update(Context, To_String(Create_New_V4));
+      SHA_Value := SHA.Digest(Context);      
+      for I in ID.Data'Range loop
+         ID.Data(I) := Unsigned_8(SHA_Value(Index));
+         Index := Index + 1;
+      end loop;
+      SHA.Update(Context, SHA_Value);      
+      Set_Variant(ID);      
+      -- Set the version
+      ID.Data (6) := (ID.Data (6) and 16#5F#) or 16#50#;      
+      return ID;
+   end Create_New_V5;
+   
 end UUIDs;

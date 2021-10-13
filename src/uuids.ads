@@ -25,6 +25,8 @@ package UUIDs is
      (UUID_String : in String;
       ID          : out UUID;
       Success     : out Boolean);
+   function Create_New_V4 return UUID;
+   function Create_New_V5 return UUID;
    
 private   
    type UUID_Array is array (0 .. 15) of Unsigned_8;
