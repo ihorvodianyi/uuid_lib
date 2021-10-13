@@ -1,5 +1,5 @@
 with Ada.Numerics.Discrete_Random;
-
+with Ada.Text_IO; use Ada.Text_IO;
 with GNAT.SHA1;
 with Ada.Streams; use Ada.Streams;
 
@@ -55,12 +55,12 @@ package body UUIDs is
    is
       Result : String(1 .. 36);
       Index  : Integer := Result'First;
-      Item   : Natural;
+      Item   : Integer;
    begin      
       for I in UUID'Range loop
          Item := Natural(Self(I));
          Result(Index) := Hex_Chars(Item / 16);
-         Result(Index + 1) := Hex_Chars(item mod 16);
+         Result(Index + 1) := Hex_Chars(Item mod 16);         
          Index := Index + 2;
          if I = 3 or else I = 5 or else I = 7 or else I = 9
          then
@@ -89,27 +89,28 @@ package body UUIDs is
                                   Result: out Unsigned_8;
                                   Success : out Boolean)
       is
-      begin
-         Result := 0;
+      begin         
          Success := True;
          case Char is
-            when '0' => Result := 16#f0#;
-            when '1' => Result := 16#f1#;
-            when '2' => Result := 16#f2#;
-            when '3' => Result := 16#f3#;
-            when '4' => Result := 16#f4#;
-            when '5' => Result := 16#f5#;
-            when '6' => Result := 16#f6#;
-            when '7' => Result := 16#f7#;
-            when '8' => Result := 16#f8#;
-            when '9' => Result := 16#f9#;
-            when 'a' | 'A' => Result := 16#fa#;
-            when 'b' | 'B' => Result := 16#fb#;
-            when 'c' | 'C' => Result := 16#fc#;
-            when 'd' | 'D' => Result := 16#fd#;
-            when 'e' | 'E' => Result := 16#fe#;
-            when 'f' | 'F' => Result := 16#ff#;
-            when others => Success := False;
+            when '0' => Result := 16#00#;
+            when '1' => Result := 16#01#;
+            when '2' => Result := 16#02#;
+            when '3' => Result := 16#03#;
+            when '4' => Result := 16#04#;
+            when '5' => Result := 16#05#;
+            when '6' => Result := 16#06#;
+            when '7' => Result := 16#07#;
+            when '8' => Result := 16#08#;
+            when '9' => Result := 16#09#;
+            when 'a' | 'A' => Result := 16#0a#;
+            when 'b' | 'B' => Result := 16#0b#;
+            when 'c' | 'C' => Result := 16#0c#;
+            when 'd' | 'D' => Result := 16#0d#;
+            when 'e' | 'E' => Result := 16#0e#;
+            when 'f' | 'F' => Result := 16#0f#;
+            when others =>
+               Result := 0;
+               Success := False;
          end case;
       end Hex_To_Unsigned_8;
    
@@ -137,7 +138,7 @@ package body UUIDs is
                Hex_To_Unsigned_8(UUID_String(Index + 1), Low, Success);
                if Success
                Then
-                  ID(I) := Shift_Left(High, 8) and Low;
+                  ID(I) := Shift_Left(High, 4) or Low;
                   Index := Index + 2;
                end if;
             end if;

@@ -29,7 +29,7 @@ package UUIDs is
    function Create_New_V5 return UUID;
    
 private   
-   type UUID is array (0 .. 15) of Unsigned_8;
+   type UUID is array (0 .. 15) of Unsigned_8 with Default_Component_Value => 0;
    
    procedure Set_Variant(ID : in out UUID);
 
