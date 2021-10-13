@@ -1,7 +1,8 @@
 with Interfaces; use Interfaces;
-package UUIDs is
+package UUIDs is 
 
    type UUID is private;
+   type UUID1 is private;
    
    type Variant_UUID is
      (NCS,
@@ -30,6 +31,8 @@ package UUIDs is
    
 private   
    type UUID_Array is array (0 .. 15) of Unsigned_8;
+   
+   type UUID1 is array (0 .. 15) of Integer;
    
    type UUID is
       record
