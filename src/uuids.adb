@@ -13,9 +13,9 @@ package body UUIDs is
    
    function Is_Nil(Self : in UUID) return Boolean is
    begin
-      for i in Self.Data'Range
+      for i in Self'Range
       loop
-         if Self.Data (i) /= 0 then
+         if Self(i) /= 0 then
             return False;
          end if;
       end loop;
@@ -24,7 +24,7 @@ package body UUIDs is
    
    function Version(Self : in UUID) return Version_UUID
    is
-      Version_Byte : constant Unsigned_8 := Self.data (6) and 16#F0#;
+      Version_Byte : constant Unsigned_8 := Self(6) and 16#F0#;
    begin
       case Version_Byte is
          when 16#10# => return Time_Based;
@@ -38,7 +38,7 @@ package body UUIDs is
    
    function Variant(Self : in UUID) return Variant_UUID
    is
-      Variant_Byte : constant Unsigned_8 := Self.data (8);
+      Variant_Byte : constant Unsigned_8 := Self(8);
    begin
       if (Variant_Byte and 16#80#) = 0 then
          return NCS;
@@ -57,8 +57,8 @@ package body UUIDs is
       Index  : Integer := Result'First;
       Item   : Natural;
    begin      
-      for I in UUID_Array'Range loop
-         Item := Natural(Self.Data(I));
+      for I in UUID'Range loop
+         Item := Natural(Self(I));
          Result(Index) := Hex_Chars(Item / 16);
          Result(Index + 1) := Hex_Chars(item mod 16);
          Index := Index + 2;
@@ -121,7 +121,7 @@ package body UUIDs is
         and then UUID_String(Hyphen4) = Hyphen
       then
          Index := UUID_String'First;
-         for I in UUID_Array'Range
+         for I in UUID'Range
          loop
             if Index = Hyphen1
               or else Index = Hyphen2
@@ -137,7 +137,7 @@ package body UUIDs is
                Hex_To_Unsigned_8(UUID_String(Index + 1), Low, Success);
                if Success
                Then
-                  ID.Data(I) := Shift_Left(High, 8) and Low;
+                  ID(I) := Shift_Left(High, 8) and Low;
                   Index := Index + 2;
                end if;
             end if;
@@ -151,7 +151,7 @@ package body UUIDs is
    procedure Set_Variant(ID : in out UUID) is
    begin
       -- Set variant 1
-      ID.Data(8) := (ID.Data(8) and 16#BF#) or 16#80#;
+      ID(8) := (ID(8) and 16#BF#) or 16#80#;
    end Set_Variant;
    
    function Create_New_V4 return UUID
@@ -161,13 +161,13 @@ package body UUIDs is
    begin      
       RNG.Reset(generator);
       rand := RNG.Random(generator);
-      for I in UUID_Array'Range loop
-         ID.Data(I) := Unsigned_8(rand and 16#ff#);
+      for I in UUID'Range loop
+         ID(I) := Unsigned_8(rand and 16#ff#);
          rand := Shift_Right(rand, 8);
       end loop;
       Set_Variant(ID);      
       -- Set the version
-      ID.Data (6) := (ID.Data (6) and 16#4F#) or 16#40#;      
+      ID(6) := (ID(6) and 16#4F#) or 16#40#;      
       return ID;
    end Create_New_V4;
    
@@ -183,14 +183,14 @@ package body UUIDs is
       Context := SHA.Initial_Context;
       SHA.Update(Context, To_String(Create_New_V4));
       SHA_Value := SHA.Digest(Context);      
-      for I in ID.Data'Range loop
-         ID.Data(I) := Unsigned_8(SHA_Value(Index));
+      for I in ID'Range loop
+         ID(I) := Unsigned_8(SHA_Value(Index));
          Index := Index + 1;
       end loop;
       SHA.Update(Context, SHA_Value);      
       Set_Variant(ID);      
       -- Set the version
-      ID.Data (6) := (ID.Data (6) and 16#5F#) or 16#50#;      
+      ID(6) := (ID(6) and 16#5F#) or 16#50#;      
       return ID;
    end Create_New_V5;
    

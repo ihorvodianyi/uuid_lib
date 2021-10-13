@@ -2,7 +2,6 @@ with Interfaces; use Interfaces;
 package UUIDs is 
 
    type UUID is private;
-   type UUID1 is private;
    
    type Variant_UUID is
      (NCS,
@@ -30,14 +29,7 @@ package UUIDs is
    function Create_New_V5 return UUID;
    
 private   
-   type UUID_Array is array (0 .. 15) of Unsigned_8;
-   
-   type UUID1 is array (0 .. 15) of Integer;
-   
-   type UUID is
-      record
-         Data : UUID_Array := (others => 0);
-      end record;   
+   type UUID is array (0 .. 15) of Unsigned_8;
    
    procedure Set_Variant(ID : in out UUID);
 
