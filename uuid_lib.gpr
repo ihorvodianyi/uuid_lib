@@ -12,12 +12,5 @@ library project Uuid_Lib is
       for Vcs_Repository_Root use ".";
    end Ide;
 
-   package Compiler is
-   end Compiler;
-
-   package Prove is
-      for Proof_Switches ("ada") use ("--level=4");
-   end Prove;
-
 end Uuid_Lib;
 
