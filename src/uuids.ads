@@ -1,5 +1,5 @@
 with Interfaces; use Interfaces;
-package UUIDs is 
+package UUIDs is
 
    type UUID is private;
    

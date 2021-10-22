@@ -15,5 +15,9 @@ library project Uuid_Lib is
    package Compiler is
    end Compiler;
 
+   package Prove is
+      for Proof_Switches ("ada") use ("--level=4");
+   end Prove;
+
 end Uuid_Lib;
 

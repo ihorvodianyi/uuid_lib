@@ -1,7 +1,6 @@
 with Ada.Numerics.Discrete_Random;
-with Ada.Text_IO; use Ada.Text_IO;
 with GNAT.SHA1;
-with Ada.Streams; use Ada.Streams;
+with Ada.Streams;
 
 package body UUIDs is
 
@@ -13,9 +12,9 @@ package body UUIDs is
    
    function Is_Nil(Self : in UUID) return Boolean is
    begin
-      for i in Self'Range
+      for I in Self'Range
       loop
-         if Self(i) /= 0 then
+         if Self(I) /= 0 then
             return False;
          end if;
       end loop;
@@ -172,10 +171,11 @@ package body UUIDs is
       return ID;
    end Create_New_V4;
    
-   package SHA renames GNAT.SHA1;
-   
    function Create_New_V5 return UUID
    is
+      package SHA renames GNAT.SHA1;
+      use Ada.Streams;
+      
       Context   : SHA.Context;
       ID        : UUID;
       SHA_Value : SHA.Binary_Message_Digest;
